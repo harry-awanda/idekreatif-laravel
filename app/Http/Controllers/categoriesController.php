@@ -32,11 +32,14 @@ class categoriesController extends Controller
   {
     $request->validate([
       "category_name" => 'required',
-  ]);
-  
-  Categories::create($request->all());
-  return redirect()->route('categories.index')->with('success','Data berhasil disimpan!');
-  }
+    ]);
+
+    if ($category = Categories::create($request->all())) {
+      return redirect()->route('categories.index')->with('success', 'Berhasil menyimpan data!');
+    } else {
+      return redirect()->route('categories.index')->with('error', 'Gagal menyimpan data.');
+    }
+}
 
   /**
    * Display the specified resource.
@@ -60,13 +63,18 @@ class categoriesController extends Controller
   public function update(Request $request, string $id)
   {
     $data_categories = Categories::find($id);
-        $request->validate([
-            "category_name" => 'required'
-        ]);
-        
-        $data_categories->update($request->all());
-        return redirect()->route('categories.index')->with('success','Data berhasil disimpan!');
-  }
+    if (!$data_categories) {
+      return redirect()->route('categories.index')->with('error', 'Data tidak ditemukan.');
+    }
+    $request->validate([
+      "category_name" => 'required'
+    ]);
+    if ($data_categories->update($request->all())) {
+      return redirect()->route('categories.index')->with('success', 'Berhasil memperbarui data!');
+    } else {
+      return redirect()->route('categories.index')->with('error', 'Gagal memperbarui data.');
+    }
+}
 
   /**
    * Remove the specified resource from storage.
@@ -74,7 +82,13 @@ class categoriesController extends Controller
   public function destroy(string $id)
   {
     $categories = Categories::find($id);
-    $categories->delete();
-    return redirect()->route('categories.index')->with('success','Data berhasil dihapus!');
-  }
+    if (!$categories) {
+      return redirect()->route('categories.index')->with('error', 'Data tidak ditemukan.');
+    }
+    if ($categories->delete()) {
+      return redirect()->route('categories.index')->with('success', 'Berhasil menghapus data!');
+    } else {
+      return redirect()->route('categories.index')->with('error', 'Gagal menghapus data.');
+    }
+}
 }
