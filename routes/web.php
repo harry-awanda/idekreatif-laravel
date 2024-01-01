@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\categoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 // Route untuk tampilan form registrasi
-Route::get('/register', [authController::class, 'showRegistrationForm'])->name('register');
+Route::get('register', [authController::class, 'showRegistrationForm'])->name('register');
 // Route untuk proses registrasi
-Route::post('/register', [authController::class, 'postregister']);
+Route::post('register', [authController::class, 'postregister']);
 // Route untuk tampilan form login
-Route::get('/login', [authController::class, 'showLoginForm'])->name('login');
+Route::get('login', [authController::class, 'showLoginForm'])->name('login');
 // Route untuk proses login
-Route::post('/login', [authController::class, 'postlogin']);
+Route::post('login', [authController::class, 'postlogin']);
 
-Route::get('/dashboard', [dashboardController::class, 'index']);
+Route::get('dashboard', [dashboardController::class, 'index']);
+Route::resource('categories', categoriesController::class);
